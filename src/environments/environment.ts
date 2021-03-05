@@ -3,9 +3,14 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
-};
+  production: false,
+  apiUrl:  'https://bluerockmicro.com/api/',
+  authUrl: 'https://bluerockmicro.com/auth/',
+  fileUrl: 'https://bluerockmicro.com/file/',
 
+  adminPin: '369963',
+  pinKeySecret: 'supersecret'
+};
 /*
  * For easier debugging in development mode, you can import the following file
  * to ignore zone related error stack frames such as `zone.run`, `zoneDelegate.invokeTask`.
