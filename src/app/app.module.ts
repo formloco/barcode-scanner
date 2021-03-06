@@ -19,6 +19,8 @@ import { AuthService } from './service/auth.service';
 import { AuthGuard } from './service/auth-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { IdbPersistenceService } from './service-idb/idb-persistence.service';
+
 
 @NgModule({
   declarations: [
