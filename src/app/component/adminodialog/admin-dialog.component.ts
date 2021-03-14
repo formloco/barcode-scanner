@@ -15,7 +15,9 @@ export type Data = {
 export class AdminDialogComponent implements OnInit {
   pincode:number;
   login:boolean;
+  emailReq:boolean;
   signInForm: FormGroup;
+  email:string;
  
   ngOnInit(): void {
    
@@ -26,9 +28,11 @@ export class AdminDialogComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data:any,
     private fb: FormBuilder) {
       this.login = data?.login;
+      this.emailReq = data?.emailReq;
       this.signInForm = this.fb.group({
         create: ['', [Validators.required, Validators.maxLength]],
-        enter: ['', [Validators.required, Validators.maxLength]]
+        enter: ['', [Validators.required, Validators.maxLength]],
+        email:['',[Validators.required]]
       });
     }
 

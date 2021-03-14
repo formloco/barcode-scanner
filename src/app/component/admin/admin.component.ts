@@ -36,7 +36,7 @@ export class AdminComponent implements OnInit {
       this.dialogRef = this.dialog.open(AdminDialogComponent, {
         id: 'admin-dialog',
         data: {
-          login: !!this.login
+          login: !!this.login,
         }
       });
     }

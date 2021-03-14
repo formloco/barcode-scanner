@@ -22,6 +22,6 @@
   </table>
   <div>
     <button mat-raised-button class='export-button' (click)="exporter.exportTable('csv')">Export To CSV</button>
-    <button mat-raised-button>Export To Cloud</button>
+    <button mat-raised-button (click)='onExport()'>Export To Cloud</button>
   </div>
 </div>

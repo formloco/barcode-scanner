@@ -28,6 +28,7 @@ export class SyncControlService {
 
         this.syncService.syncDataCloud(this.idbData).subscribe(res => {
           let response = res;
+          console.log(res);
           if (response["message"] === 'Data synchronized.') {
             this.idbCrudService.clear('data').subscribe();
           }

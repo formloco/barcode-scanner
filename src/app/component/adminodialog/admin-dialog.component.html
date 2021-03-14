@@ -1,17 +1,24 @@
 <div class="admin-dialog">
     <form [formGroup]="signInForm">
-        <mat-form-field *ngIf="login" appearance="standard" fxFlex>
+        <mat-form-field *ngIf="login && !emailReq" appearance="standard" fxFlex>
             <input matInput [(ngModel)]="pincode" maxlength="4" placeholder="Enter Pin" formControlName="enter"
                 type="text" required>
             <mat-error>
                 Pin is required!
             </mat-error>
         </mat-form-field>
-        <mat-form-field *ngIf="!login" appearance="standard" fxFlex>
-            <input matInput [(ngModel)]="pincode" maxlength="4" placeholder="Create Pin" formControlName="enter"
+        <mat-form-field *ngIf="!login && !emailReq" appearance="standard" fxFlex>
+            <input matInput [(ngModel)]="pincode" maxlength="4" placeholder="Create Pin" formControlName="create"
                 type="text" required>
             <mat-error>
                 Pin is required!
+            </mat-error>
+        </mat-form-field>
+        <mat-form-field *ngIf="emailReq" appearance="standard" fxFlex>
+            <input matInput [(ngModel)]="email" placeholder="Enter email" formControlName="email"
+                type="email" required>
+            <mat-error>
+                Email is required!
             </mat-error>
         </mat-form-field>
         <!-- <mat-form-field appearance="standard">
@@ -24,6 +31,7 @@
     </form>
     <mat-dialog-actions>
         <button mat-button (click)="onNoClick()">Cancel</button>
-        <button mat-button mat-dialog-close [mat-dialog-close]="pincode">Submit</button>
+        <button *ngIf="!emailReq" mat-button mat-dialog-close [mat-dialog-close]="pincode">Submit</button>
+        <button *ngIf="emailReq" mat-button mat-dialog-close [mat-dialog-close]="email">Submit</button>
     </mat-dialog-actions>
 </div>
