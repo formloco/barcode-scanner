@@ -1,15 +1,29 @@
-<div *ngIf="isEnabled" fxLayout="row" fxLayoutAlign="center center">
-  <zxing-scanner [enable]=isEnabled [torch]="torchEnabled" [device]="deviceCurrent" (scanSuccess)="onCodeResult($event)" [formats]="formatsEnabled"
-    [tryHarder]="tryHarder" (permissionResponse)="onHasPermission($event)" (camerasFound)="onCamerasFound($event)" (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
-</div>
-<div class="control-padding">
-  <button *ngIf="isEnabled" mat-raised-button (click)="stop()" color="primary" fxFlex>
-    Stop Barcode Scan
-  </button>
-  <button *ngIf="!isEnabled" mat-raised-button (click)="scan()" color="primary" fxFlex>
-    Start Barcode Scan
-  </button>
-</div>
+<mat-grid-list cols="1" rowHeight="100px">
+  <mat-grid-tile colspan="1" rowspan="4">
+    <div fxLayout="row" fxLayoutAlign="center center" class="zxing-scanner">
+      <div *ngIf="isEnabled" >
+        <zxing-scanner [enable]="isEnabled" [torch]="torchEnabled" [device]="deviceCurrent"
+        (scanSuccess)="onCodeResult($event)" [formats]="formatsEnabled" [tryHarder]="tryHarder"
+        (permissionResponse)="onHasPermission($event)" (camerasFound)="onCamerasFound($event)"
+        (torchCompatible)="onTorchCompatible($event)"></zxing-scanner>
+      </div>
+    </div>
+  </mat-grid-tile>
+  <mat-grid-tile colspan="1" rowspan="1">
+    <div class="control-padding">
+      <button *ngIf="!isEnabled" mat-stroked-button (click)="scan()" color="primary">
+        Start Barcode Scan
+      </button>
+      <button *ngIf="isEnabled" mat-stroked-button (click)="stop()" color="primary">
+        Stop Barcode Scan
+      </button>
+    </div>
+    <div class="admin-button">
+      <app-admin (loggedInEmitter)="onloggedIn($event)"></app-admin>
+    </div>
+  </mat-grid-tile>
+</mat-grid-list>
+<app-scanned-data [tableData]="tableData"></app-scanned-data>
 
 <!-- <div *ngIf="!isEnabled" [formGroup]="runForm" class="control-padding">
   <mat-form-field appearance="{{builderService.detailArray[index].appearance}}" fxFlex>

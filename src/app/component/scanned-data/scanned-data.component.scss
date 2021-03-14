@@ -1,0 +1,30 @@
+.table-data {
+    display: flex;
+    justify-content: space-between;
+    flex-direction: column;
+    align-items: center;
+  }
+
+.scanned-data {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.export-button {
+  margin : 1rem;
+}
+
+
+  .tb-header{
+    margin: 10px;
+  }
+
+  .mat-row ,.mat-header-row{
+    height: auto;
+  }
+  
+  .mat-cell,.mat-header-cell {
+    padding: 18px 18px 18px 18px;
+    margin: 10px 10px 10px 10px;
+  }

@@ -1,5 +1,5 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { APP_INITIALIZER, NgModule } from '@angular/core';
 
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { HttpConfig} from './interceptor/httpconfig.interceptor';
@@ -20,6 +20,10 @@ import { AuthGuard } from './service/auth-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { IdbPersistenceService } from './service-idb/idb-persistence.service';
+import { AdminDialogComponent } from './component/adminodialog/admin-dialog.component';
+import { ScannedDataComponent } from './component/scanned-data/scanned-data.component';
+import { MatTableExporterModule } from 'mat-table-exporter';
+
 
 
 @NgModule({
@@ -27,20 +31,25 @@ import { IdbPersistenceService } from './service-idb/idb-persistence.service';
     AppComponent,
     PinComponent,
     AdminComponent,
-    BarcodeComponent
+    AdminDialogComponent,
+    BarcodeComponent,
+    ScannedDataComponent
   ],
+  entryComponents:[AdminDialogComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModule,
     HttpClientModule,
-    ZXingScannerModule
+    ZXingScannerModule,
+    MatTableExporterModule
   ],
   exports:[
     PinComponent,
     AdminComponent,
-    BarcodeComponent
+    AdminDialogComponent,
+    BarcodeComponent,
   ],
   providers: [
     AuthService, 
@@ -50,6 +59,11 @@ import { IdbPersistenceService } from './service-idb/idb-persistence.service';
       useClass: HttpConfig,
       multi: true
     },
+    { provide: APP_INITIALIZER,
+      useFactory: (idbPersistenceService: IdbPersistenceService) => () => idbPersistenceService.connect(),
+      deps: [IdbPersistenceService],
+      multi: true
+    }
   ],
   bootstrap: [AppComponent]
 })
