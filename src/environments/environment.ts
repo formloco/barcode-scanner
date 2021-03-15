@@ -7,6 +7,7 @@ export const environment = {
   apiUrl:  'https://bluerockmicro.com/api/',
   authUrl: 'https://bluerockmicro.com/auth/',
   fileUrl: 'https://bluerockmicro.com/file/',
+  syncUrl:      'https://bluerockmicro.com/sync/',
 
   adminPin: '369963',
   pinKeySecret: 'supersecret'

@@ -1,12 +1,15 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ViewChild } from '@angular/core';
 
 import { FormControl, Validators } from '@angular/forms';
 
 import { BehaviorSubject } from 'rxjs';
 
-import { BarcodeFormat } from '@zxing/library';
+import { BarcodeFormat, MultiFormatReader } from '@zxing/library';
 
 import { AppService } from "../../service/app.service";
+
+import { IdbCrudService } from "../../service-idb/idb-crud.service";
+import { ZXingScannerComponent } from '@zxing/ngx-scanner';
 
 @Component({
   selector: 'app-barcode',
@@ -33,14 +36,16 @@ export class BarcodeComponent implements OnInit {
   hasPermission: boolean;
 
   qrResultString: string;
-
+  idbData;
+  tableData;
   torchEnabled = false;
   torchAvailable$ = new BehaviorSubject<boolean>(false);
   tryHarder = false;
 
   isEnabled = true;
 
-  constructor(public appService: AppService) { }
+  @ViewChild(ZXingScannerComponent) scanner: ZXingScannerComponent;
+  constructor(public appService: AppService, public idb: IdbCrudService) { }
 
   ngOnInit(): void {
     this.isEnabled = true;
@@ -53,6 +58,8 @@ export class BarcodeComponent implements OnInit {
 
   stop() {
     this.isEnabled = false;
+    this.scanner.reset();
+
   }
 
   onTorchCompatible(isCompatible: boolean): void {
@@ -66,13 +73,33 @@ export class BarcodeComponent implements OnInit {
   onCodeResult(resultString: string) {
     this.qrResultString = resultString;
     this.isEnabled = false;
-    this.runForm.patchValue({'BarCodeScanner0': this.qrResultString})
+    //this.runForm.patchValue({'BarCodeScanner0': this.qrResultString})
+    this.idb.put('data', { 'BarCodeScanner0': this.qrResultString })
+    this.scanner.reset();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
   }
-  
+
+  onloggedIn(emittedValue) {
+    if (emittedValue) {
+      this.idb.readAll('data').subscribe(data => {
+        this.idbData = data;
+        if (this.idbData.length > 0) {
+          this.tableData = this.idbData.map(d => {
+            console.log(d);
+            return {
+              id: d['id'],
+              barcode: d['BarCodeScanner0']
+            }
+          });
+        }
+
+      })
+    }
+  }
+
 }
 

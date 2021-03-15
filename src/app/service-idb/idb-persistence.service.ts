@@ -12,7 +12,8 @@ export class IdbPersistenceService {
   async connect(): Promise<void> {
     this.formLocoDB = await openDB('formLocoDB', 1, {
       upgrade(db) {
-        db.createObjectStore('data', { keyPath: 'id', autoIncrement: true }) // form data
+        db.createObjectStore('data', { keyPath: 'id', autoIncrement: true }) ,// form data
+        db.createObjectStore('login', { keyPath: 'id', autoIncrement: true}) 
      }
     });
   }

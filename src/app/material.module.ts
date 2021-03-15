@@ -15,6 +15,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import {MatGridListModule} from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -51,7 +52,8 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatRadioModule,
     MatSliderModule,
     MatButtonModule, 
-    MatDialogModule, 
+    MatDialogModule,
+    MatGridListModule, 
     MatSelectModule,
     MatStepperModule,
     MatToolbarModule,
@@ -72,7 +74,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatTooltipModule,
     BrowserAnimationsModule,
     OverlayModule,
-    MatProgressBarModule
+    MatProgressBarModule,
   ],
   exports:[
     FormsModule,
@@ -89,6 +91,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     MatSliderModule,
     MatButtonModule, 
     MatDialogModule, 
+    MatGridListModule, 
     MatSelectModule,
     MatStepperModule,
     MatToolbarModule,

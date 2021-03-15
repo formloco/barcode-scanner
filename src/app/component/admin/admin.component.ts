@@ -1,16 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 
-import * as uuid from 'uuid';
-import { Router, ActivatedRoute } from '@angular/router';
-
-import { MatSnackBar } from '@angular/material/snack-bar';
-
-import { FormBuilder, FormControl, Validators, FormGroup, FormArray } from '@angular/forms';
-
-import { AuthService } from "../../service/auth.service";
-import { AppService } from "../../service/app.service";
-
-import { environment } from '../../../environments/environment';
+import { v4 as uuidv4 } from 'uuid';
+import { AdminDialogComponent } from '../adminodialog/admin-dialog.component';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { take } from 'rxjs/operators';
+import { IdbCrudService } from 'src/app/service-idb/idb-crud.service';
+import { ErrorService } from 'src/app/service/error.service';
 
 @Component({
   selector: 'app-admin',
@@ -18,74 +13,60 @@ import { environment } from '../../../environments/environment';
   styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
+  pinCode: string;
+  @Output() loggedInEmitter = new EventEmitter<boolean>();
+  loggedIn:boolean;
 
-  token;
-  form_id;
-  tenant_id
+  public dialogRef: MatDialogRef<AdminDialogComponent>;
+  public login;
+  constructor(public dialog: MatDialog, public idb: IdbCrudService, private errorService: ErrorService) { }
 
-  templateForm: FormGroup;
 
-  fileArray = [];
-  isError = false;
-  isNotFile = true;
-  isImportOpen = false;
+  verify(): void {
+    this.idb.read('login', 1).subscribe(i => {
+      this.login = i;
+      this.openDialog();
+    });
+  }
 
-  pinKeySecret = environment.pinKeySecret;
 
-  constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private formBuilder: FormBuilder,
-    private authService: AuthService,
-    private appService: AppService) { 
-      this.templateForm = this.formBuilder.group({
-        templateArray: this.formBuilder.array([])
+  openDialog(): void {
+    console.log(this.loggedIn);
+    if (!this.dialogRef?.componentInstance && !this.loggedIn) {
+      this.dialogRef = this.dialog.open(AdminDialogComponent, {
+        id: 'admin-dialog',
+        data: {
+          login: !!this.login,
+        }
       });
     }
-
-  private async readFile(file: File): Promise<string | ArrayBuffer> {
-    return new Promise<string | ArrayBuffer>((resolve, reject) => {
-      const reader = new FileReader();
-
-      reader.onload = e => {
-        return resolve((e.target as FileReader).result);
-      };
-
-      reader.onerror = e => {
-        console.error(`FileReader failed on file ${file.name}.`);
-        return reject(null);
-      };
-
-      if (!file) {
-        console.error('No file to read.');
-        return reject(null);
+    
+    this.dialogRef.afterClosed().subscribe(result => {
+      if (!this.login) {
+        this.onPincode(result);
+      } else if (result == this.login['pincode']) {
+        this.loggedInEmitter.emit(true);
+        this.loggedIn = true;
+      } else {
+        this.errorService.popSnackbar('Pin is Required');
       }
-
-      reader.readAsDataURL(file);
     });
   }
+
+
 
   ngOnInit(): void {
-    this.getData();
+
   }
 
-  getData() {
-    let obj = ({
-      form_id: this.form_id,
-      tenant_id: this.tenant_id
-    }) 
-    this.appService.getData(obj).subscribe(data => {
-      console.log(data)
-    });
+  onPincode(pin: number) {
+
+    this.idb.put('login',
+      {
+        'pincode': pin,
+        'tenant_id': uuidv4()
+      });
   }
 
-  closeOverlay() {
-    this.isImportOpen = false;
-  }
-
-  goTemplates() {
-    this.authService.loggedInStatus = false;
-    this.router.navigate(['']);
-  }
 
 }
