@@ -41,7 +41,7 @@ export class ScannedDataComponent implements OnInit {
   }
 
   openDialog(): void {
-    if (!this.dialogRef?.componentInstance) {
+    if (!this.dialogRef.componentInstance) {
       this.dialogRef = this.dialog.open(AdminDialogComponent, {
         id: 'admin-dialog',
         data: {
