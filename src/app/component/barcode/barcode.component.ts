@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 
 import { FormControl, Validators } from '@angular/forms';
 
@@ -20,16 +20,19 @@ export class BarcodeComponent implements OnInit {
 
   @Input() index;
   @Input() runForm;
-
+  loggedIn;
   availableDevices: MediaDeviceInfo[];
   deviceCurrent: MediaDeviceInfo;
   deviceSelected: string;
 
   formatsEnabled: BarcodeFormat[] = [
-    BarcodeFormat.CODE_128,
-    BarcodeFormat.DATA_MATRIX,
     BarcodeFormat.EAN_13,
-    BarcodeFormat.QR_CODE,
+    BarcodeFormat.EAN_8,
+    BarcodeFormat.UPC_A,
+    BarcodeFormat.UPC_E,
+    BarcodeFormat.UPC_EAN_EXTENSION,
+    BarcodeFormat.CODE_128,
+    BarcodeFormat.CODE_39
   ];
 
   hasDevices: boolean;
@@ -59,7 +62,6 @@ export class BarcodeComponent implements OnInit {
   stop() {
     this.isEnabled = false;
     this.scanner.reset();
-
   }
 
   onTorchCompatible(isCompatible: boolean): void {
@@ -76,6 +78,7 @@ export class BarcodeComponent implements OnInit {
     //this.runForm.patchValue({'BarCodeScanner0': this.qrResultString})
     this.idb.put('data', { 'BarCodeScanner0': this.qrResultString })
     this.scanner.reset();
+    this.scannedData();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
@@ -85,18 +88,24 @@ export class BarcodeComponent implements OnInit {
 
   onloggedIn(emittedValue) {
     if (emittedValue) {
+      this.loggedIn = emittedValue;
+      this.scannedData();
+    }
+  }
+
+  scannedData() {
+    if(this.loggedIn) {
       this.idb.readAll('data').subscribe(data => {
         this.idbData = data;
         if (this.idbData.length > 0) {
           this.tableData = this.idbData.map(d => {
-            console.log(d);
             return {
               id: d['id'],
               barcode: d['BarCodeScanner0']
             }
           });
         }
-
+  
       })
     }
   }
