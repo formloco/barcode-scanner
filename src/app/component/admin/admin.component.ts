@@ -1,11 +1,10 @@
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
-
-import { v4 as uuidv4 } from 'uuid';
-import { AdminDialogComponent } from '../adminodialog/admin-dialog.component';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
-import { take } from 'rxjs/operators';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { IdbCrudService } from 'src/app/service-idb/idb-crud.service';
-import { ErrorService } from 'src/app/service/error.service';
+import { AppService } from 'src/app/service/app.service';
+import { MatSidenav } from '@angular/material/sidenav';
+import { FormBuilder, FormGroup } from '@angular/forms';
+import { AuthService } from 'src/app/service/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-admin',
@@ -17,54 +16,63 @@ export class AdminComponent implements OnInit {
   @Output() loggedInEmitter = new EventEmitter<boolean>();
   loggedIn:boolean;
 
-  public dialogRef: MatDialogRef<AdminDialogComponent>;
+  @ViewChild('sidenav') sidenav: MatSidenav;
+
+  token;
+  templates;
+  idbData;
+  templateControls;
+  tableData;
+  templateForm: FormGroup;
+
+  page;
+  fileArray = [];
+  isError = false;
+  isMainMenu = true;
+  isRightMenu = false;
+  isImportOpen = false;
+  isLookuplist = true;
+
   public login;
-  constructor(public dialog: MatDialog, public idb: IdbCrudService, private errorService: ErrorService) { }
-
-
-  verify(): void {
-    this.idb.read('login', 1).subscribe(i => {
-      this.login = i;
-      this.openDialog();
+  constructor(private router: Router, public idb: IdbCrudService,  private authService: AuthService, public appService: AppService,private formBuilder: FormBuilder) {
+    this.templateForm = this.formBuilder.group({
+      templateArray: this.formBuilder.array([])
     });
+   }
+
+
+  ngOnInit() {
+    this.scannedData();
   }
 
+  close(reason: string) {
+    this.sidenav.close();
+  }
 
-  openDialog(): void {
-    console.log(this.loggedIn);
-    if (!this.dialogRef?.componentInstance && !this.loggedIn) {
-      this.dialogRef = this.dialog.open(AdminDialogComponent, {
-        id: 'admin-dialog',
-        data: {
-          login: !!this.login,
+  closeOverlay() {
+    this.isImportOpen = false;
+  }
+
+  goHome() {
+    this.authService.loginStatus = false;
+    this.router.navigate(['']);
+  }
+
+  openList() {
+    this.appService.isData = false;
+  }
+
+  scannedData() {
+      this.idb.readAll('data').subscribe(data => {
+        this.idbData = data;
+        if (this.idbData.length > 0) {
+          this.tableData = this.idbData.map(d => {
+            return {
+              id: d['id'],
+              barcode: d['BarCodeScanner0']
+            }
+          });
         }
-      });
-    }
-    
-    this.dialogRef.afterClosed().subscribe(result => {
-      if (!this.login) {
-        this.onPincode(result);
-      } else if (result == this.login['pincode']) {
-        this.loggedInEmitter.emit(true);
-        this.loggedIn = true;
-      } else {
-        this.errorService.popSnackbar('Pin is Required');
-      }
-    });
-  }
-
-
-
-  ngOnInit(): void {
-
-  }
-
-  onPincode(pin: number) {
-
-    this.idb.put('login',
-      {
-        'pincode': pin,
-        'tenant_id': uuidv4()
       });
   }
 

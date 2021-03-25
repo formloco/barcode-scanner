@@ -78,36 +78,11 @@ export class BarcodeComponent implements OnInit {
     //this.runForm.patchValue({'BarCodeScanner0': this.qrResultString})
     this.idb.put('data', { 'BarCodeScanner0': this.qrResultString })
     this.scanner.reset();
-    this.scannedData();
   }
 
   onCamerasFound(devices: MediaDeviceInfo[]): void {
     this.availableDevices = devices;
     this.hasDevices = Boolean(devices && devices.length);
-  }
-
-  onloggedIn(emittedValue) {
-    if (emittedValue) {
-      this.loggedIn = emittedValue;
-      this.scannedData();
-    }
-  }
-
-  scannedData() {
-    if(this.loggedIn) {
-      this.idb.readAll('data').subscribe(data => {
-        this.idbData = data;
-        if (this.idbData.length > 0) {
-          this.tableData = this.idbData.map(d => {
-            return {
-              id: d['id'],
-              barcode: d['BarCodeScanner0']
-            }
-          });
-        }
-  
-      })
-    }
   }
 
 }

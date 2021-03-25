@@ -13,10 +13,10 @@
       </mat-form-field>
     </div>
     <div mat-dialog-actions fxLayoutAlign="center" fxLayout="row" fxLayoutGap="1rem">
-      <button (click)="goTemplates()" mat-stroked-button color="primary">
+      <button (click)="goHome()" mat-stroked-button color="primary">
         CANCEL
       </button>
-      <button (click)="checkPIN()" mat-raised-button color="primary" [disabled]="!pinForm.valid">
+      <button (click)="loginPIN()" mat-raised-button color="primary" [disabled]="!pinForm.valid">
         OK
       </button>
     </div>

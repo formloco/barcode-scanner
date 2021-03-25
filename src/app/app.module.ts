@@ -20,9 +20,11 @@ import { AuthGuard } from './service/auth-guard.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { IdbPersistenceService } from './service-idb/idb-persistence.service';
-import { AdminDialogComponent } from './component/adminodialog/admin-dialog.component';
 import { ScannedDataComponent } from './component/scanned-data/scanned-data.component';
 import { MatTableExporterModule } from 'mat-table-exporter';
+import {LayoutComponent} from './component/layout/layout.component';
+import {DesktopComponent} from './component/desktop/desktop.component';
+import {HeaderComponent} from './component/header/header.component';
 
 
 
@@ -31,11 +33,13 @@ import { MatTableExporterModule } from 'mat-table-exporter';
     AppComponent,
     PinComponent,
     AdminComponent,
-    AdminDialogComponent,
     BarcodeComponent,
-    ScannedDataComponent
+    ScannedDataComponent,
+    LayoutComponent,
+    DesktopComponent,
+    HeaderComponent
   ],
-  entryComponents:[AdminDialogComponent],
+  entryComponents:[],
   imports: [
     BrowserModule,
     AppRoutingModule,
@@ -48,7 +52,6 @@ import { MatTableExporterModule } from 'mat-table-exporter';
   exports:[
     PinComponent,
     AdminComponent,
-    AdminDialogComponent,
     BarcodeComponent,
   ],
   providers: [

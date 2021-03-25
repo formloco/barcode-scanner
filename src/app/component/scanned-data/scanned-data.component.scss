@@ -1,23 +1,19 @@
-.table-data {
-    display: flex;
-    justify-content: space-between;
-    flex-direction: column;
-    align-items: center;
-  }
 
-.scanned-data {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+
+.export-buttons{
+  padding: 1.5rem;
+  margin: auto;
+  width: 50%;
 }
 
 .export-button {
-  margin : 1rem;
+  margin: 10px;
 }
 
-
-  .tb-header{
-    margin: 10px;
+  .mat-header-cell{
+    margin: 20px;
+    font-weight: bolder;
+    font-size: 1.3rem;
   }
 
   .mat-row ,.mat-header-row{
@@ -27,4 +23,21 @@
   .mat-cell,.mat-header-cell {
     padding: 18px 18px 18px 18px;
     margin: 10px 10px 10px 10px;
+    text-align: center;
   }
+
+  table {
+    width: 100%;
+  }
+
+  .tableData {
+    padding: 5rem;
+  }
+
+  .scanned-data {
+    padding: 5rem;
+  }
+  
+  
+
+ 

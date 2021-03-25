@@ -1,5 +1,5 @@
 <div *ngIf="!!tableData" class="scanned-data">
-  <table mat-table [dataSource]="tableData" class="table-data" matTableExporter #exporter="matTableExporter">
+  <table mat-table [dataSource]="tableData" class="mat-elevation-z8 table-data" matTableExporter #exporter="matTableExporter">
 
     <!--- Note that these columns can be defined in any order.
           The actual rendered columns are set as a property on the row definition" -->
@@ -20,8 +20,8 @@
     <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
   </table>
-  <div>
-    <button mat-raised-button class='export-button' (click)="exporter.exportTable('csv')">Export To CSV</button>
-    <button mat-raised-button (click)='onExport()'>Export To Cloud</button>
+  <div class="export-buttons">
+    <button  mat-stroked-button color="primary" class='export-button' (click)="exporter.exportTable('csv')">Export To CSV</button>
+    <button  mat-stroked-button color="primary" (click)='onExport()'>Export To Cloud</button>
   </div>
 </div>

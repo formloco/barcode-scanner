@@ -1,33 +1,73 @@
-import { Injectable } from '@angular/core'
+import { Injectable } from '@angular/core';
 
-import { HttpClient, HttpHeaders } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
-import { environment } from '../../environments/environment'
+import { environment } from '../../environments/environment';
+
+import { IdbCrudService } from "../service-idb/idb-crud.service";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppService {
 
+  public tenantID;
+
+  public isHeader;
+  public isTask;
+  public isAssessment;
+  public isJobDetail;
+  public isWorker;
+  public isListMenu;
+
+  public isPin;
+  public isSignin;
+  public isData = true;
+  public isDarkMode = true;
+  public canvasBackground;
+
+  public page;
+  public forms;
+  public formObj;
+  public apiLists;
+  public lookupLists;
+
   apiUrl = environment.apiUrl;
-  fileUrl = environment.fileUrl;
 
   constructor(
-    private _http: HttpClient) { }
+    private _http: HttpClient,
+    private idbCrudService: IdbCrudService
+  ) { }
 
-    save(obj) {
-      return this._http.post(this.apiUrl, obj);
-    }
+  setPage(page) {
+    this.isHeader = false;
+    this.isTask = false;
+    this.isAssessment = false;
+    this.isJobDetail = false;
+    this.isWorker = false;
 
-    saveFile(obj) {
-      return this._http.post(this.fileUrl, obj);
-    }
+    if (page === 'header') this.isHeader = true;
+    if (page === 'task') this.isTask = true;
+    if (page === 'assesssment') this.isAssessment = true;
+    if (page === 'jobDetail') this.isJobDetail = true;
+    if (page === 'worker') this.isWorker = true;
 
-    getData(obj) {
-      return this._http.get(this.apiUrl + obj.tenant_id + '/' + obj.form_id);
-    }
-  
-    getFiles(tenant_id, form_id) {
-      return this._http.get(this.fileUrl + tenant_id + '/' + form_id);
-    }
+    console.log(this.isHeader,this.isTask)
+  }
+
+  create(obj) {
+    return this._http.post(this.apiUrl, obj);
+  }
+
+  getLists(obj) {
+    return this._http.post(this.apiUrl, obj);
+  }
+
+  getForms() {
+    this.lookupLists = [];
+    this.idbCrudService.readAll('data').subscribe(forms => {
+      this.lookupLists = forms;
+    });
+  }
+
 }
