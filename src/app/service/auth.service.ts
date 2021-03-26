@@ -10,13 +10,9 @@ import { environment } from '../../environments/environment';
 export class AuthService {
 
   authUrl = environment.authUrl;
-  loggedInStatus = false;
+  loginStatus: false;
 
   constructor(private _http: HttpClient) { }
-
-  get loginStatus() {
-    return this.loggedInStatus;
-  }
 
   login(obj) {
     return this._http.post(this.authUrl+'login', obj);

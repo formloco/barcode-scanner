@@ -10,6 +10,7 @@ export const environment = {
   syncUrl:      'https://bluerockmicro.com/sync/',
 
   adminPin: '369963',
+  pin: 111111,
   pinKeySecret: 'supersecret'
 };
 /*
